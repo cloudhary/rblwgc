@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 url = os.environ.get('DATABASE_URL', None)
-if url: app.config['SQLALCHEMY_DATABASE_URI']
+if url: app.config['SQLALCHEMY_DATABASE_URI'] = url
 db = SQLAlchemy(app)
 
 class Match(db.Model):
