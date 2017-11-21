@@ -5,7 +5,7 @@
     <h1>Seems like you're ready! Let's start classifying then</h1>
 
     <img src="{{ url_for('static', filename=image_1 + '.jpg') }}" height="300" width="300"/>
-    <img src="{{ url_for('static', filename=image_2 + '.jpg') }}" height="300" width="300"/>
+    <img src="{{ url_for('static', filename=image_2 + '.jpg') }}" form="dawg" height="300" width="300"/>
 
     <p>Are these two photos of the same langur? </p>
 
@@ -13,6 +13,8 @@
       {% for opt in options %}
         <input type="radio" name="classification" value='{{opt}}'> {{opt}}
       {% endfor %}
+      <input type="hidden" name="image_1" value="{{image_1}}" />
+      <input type="hidden" name="image_2" value="{{image_2}}" />
       <input type="submit">
     </form>
 

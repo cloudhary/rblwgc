@@ -47,9 +47,13 @@ def classify():
 @app.route('/submit', methods=['POST'])
 def submit():
     classification = request.form['classification']
-    db.session.add(Match("A", "B", classification))
-    db.session.commit()
-    print Match.query.all()
+    image_1 = request.form['image_1']
+    image_2 = request.form['image_2']
+
+    if (db):
+        db.session.add(Match(image_1, image_2, classification))
+        db.session.commit()
+        print Match.query.all()
     return redirect(url_for('classify'))
 
 if __name__ == '__main__':
