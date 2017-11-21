@@ -1,0 +1,19 @@
+<head>
+    <title>Raffles Banded Langur classifications</title>
+</head>
+<body>
+    <h1>Seems like you're ready! Let's start classifying then</h1>
+
+    <img src="{{ url_for('static', filename=image_1 + '.jpg') }}" height="300" width="300"/>
+    <img src="{{ url_for('static', filename=image_2 + '.jpg') }}" height="300" width="300"/>
+
+    <p>Are these two photos of the same langur? </p>
+
+    <form action="{{ url_for('submit') }}" method="post">
+      {% for opt in options %}
+        <input type="radio" name="classification" value='{{opt}}'> {{opt}}
+      {% endfor %}
+      <input type="submit">
+    </form>
+
+</body>
