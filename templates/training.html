@@ -1,0 +1,20 @@
+<head>
+      <title>Raffles Banded Langur classifications</title>
+  </head>
+  <body>
+      <h1>Hello passionate Raffles Banded Langur volunteer!</h1>
+      <p>It is currently {{ time }}.</p>
+
+      <img src="{{ url_for('static', filename=image_1 + '.jpg') }}" />
+      <img src="{{ url_for('static', filename=image_2 + '.jpg') }}" />
+
+      <p>Are these two photos of the same langur? </p>
+
+      {% for opt in options %}
+        <input type="button" value="{{opt}}">
+      {% endfor %}
+
+      <div>
+        <a href="{{ url_for('training') }}"> <input type="submit" value="Next"> </a>
+      </div>
+  </body>
