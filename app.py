@@ -4,7 +4,8 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', "")
+url = os.environ.get('DATABASE_URL', None)
+if url: app.config['SQLALCHEMY_DATABASE_URI']
 db = SQLAlchemy(app)
 
 class Match(db.Model):
@@ -19,10 +20,11 @@ class Match(db.Model):
         self.classification = classification
 
     def __repr__(self):
-        return '<Image %r and %r have been classified as %r>' % self.image_1, self.image_2, self.classification
+        return '<Image %r and %r have been classified as %r>' % (self.image_1, self.image_2, self.classification)
 
 @app.route('/')
 def homepage():
+    db.create_all()
     return redirect(url_for('training'))
 
 @app.route('/training')
