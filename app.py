@@ -1,10 +1,10 @@
-import random
+import random, os
 from flask import Flask, redirect, url_for, render_template, request
 from datetime import datetime
 from flask.ext.sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', "")
 db = SQLAlchemy(app)
 
 @app.route('/')
