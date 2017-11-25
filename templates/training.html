@@ -1,26 +1,38 @@
-<head>
-    <title>Raffles Banded Langur classifications</title>
-</head>
-<body>
-    <h1>Hello passionate Raffles Banded Langur volunteer!</h1>
-    <p>It is currently {{ time }}.</p>
+{% extends "layout.html" %}
+{% block content %}
 
-    <img src="{{ url_for('static', filename=image_1 + '.jpg') }}" height="300" width="300"/>
-    <img src="{{ url_for('static', filename=image_2 + '.jpg') }}" height="300" width="300"/>
+    <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
+    
+    <p class="lead small">It is currently {{ time }}.</p>
 
-    <p>Are these two photos of the same langur? </p>
+    <img src="{{ url_for('static', filename=image_1 + '.jpg') }}" height="300" width="300" class=""/>
+    <img src="{{ url_for('static', filename=image_2 + '.jpg') }}" height="300" width="300" class=""/>
+    
+    <br/>
+    <br/>
+
+    <p class="lead">Are these two photos of the same langur? </p>
 
     {% for opt in options %}
-      <input type="button" value="{{opt}}" onclick="document.getElementById('answer').innerHTML = '{{image_1|safe}}'[0]=='{{image_2|safe}}'[0] ? 'The same!' : 'Different langurs';">
+      <input type="button" class="btn btn-light" value="{{opt}}" onclick="document.getElementById('answer').innerHTML = '{{image_1|safe}}'[0]=='{{image_2|safe}}'[0] ? 'The same!' : 'Different langurs';">
     {% endfor %}
 
-    <div id="answer"> And the answer is ... </div>
+    <br/>
+    <br/>
+
+    <p class="btn btn-primary" id="answer">And the Answer Is...</p>
+
+    <br/>
+    <br/>
 
     <div>
-      <a href="{{ url_for('training') }}"> <input type="button" value="Next"> </a>
+      <a href="{{ url_for('training') }}"> <input type="button" class="btn btn-info btn-block bigger" value="Next Training Picture"> </a>
     </div>
 
+    <br/>
+
     <div>
-      <a href="{{ url_for('classify') }}"> <input type="button" value="I'm ready to start classifying!"> </a>
+      <a href="{{ url_for('classify') }}"> <input type="button" class="btn btn-success btn-block bigger" value="I'm ready to start classifying!"> </a>
     </div>
-</body>
+
+{% endblock %}
