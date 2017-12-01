@@ -1,6 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 
+    {% if session['logged_in'] == True %}
+        <div id = "logout">
+          <a href="{{ url_for('logout') }}" style="float :right"> <input type="button" class="btn btn-light" value="Logout"> </a>
+        </div>
+    {% endif %}
     <h2 class="cover-heading">Seems like you're ready! Let's start classifying then</h2>
 
     <img src="{{ url_for('static', filename=image_1 + '.jpg') }}" height="300" width="300" class=""/>
@@ -21,5 +26,4 @@
       <input type="hidden" name="image_2" value="{{image_2}}" /> <br/><br/>
       <input type="submit" class="btn btn-success btn-block bigger">
     </form>
-
 {% endblock %}

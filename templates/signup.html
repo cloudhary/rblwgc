@@ -1,0 +1,36 @@
+<!--{% extends "layout.html" %}-->
+{% block content %}
+    {% if session['logged_in'] == True %}
+        <div id = "logout">
+          <a href="{{ url_for('logout') }}" style="float :right"> <input type="button" class="btn btn-light" value="Logout"> </a>
+        </div>
+        <h2 class="cover-heading">Hello {{ session['username'] }}!</h2>
+    {% else %}
+        <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
+    {% endif %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+        {% if session['logged_in'] != True %}
+              <p class="lead small">Enter your details</p>
+              <form action="" method="post">
+                  <label><span> Username: </span><input type="text" placeholder="Username" name="username" value="{{
+                  request.form.username }}"> <br/>
+                  <label><span> Email: </span><input type="text" placeholder="email" name="email" value="{{
+                  request.form.username }}"> <br/>
+                 <label><span>Password:  </span><input type="password" placeholder="Password" name="password" value="{{
+                  request.form.password }}"> <br />
+                 <input class="btn btn-light" type="submit" value="Sign Up">
+              </form>
+        {% endif %}
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}
+        {% endif %}
+        {% for message in get_flashed_messages() %}
+          {{message}}
+        {% endfor %}
+    </div>
+{% endblock %}

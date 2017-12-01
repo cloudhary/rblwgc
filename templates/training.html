@@ -1,7 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
+   {% if session['logged_in'] == True %}
+        <div id = "logout">
+          <a href="{{ url_for('logout') }}" style="float :right"> <input type="button" class="btn btn-light" value="Logout"> </a>
+        </div>
+        <h2 class="cover-heading">Hello {{ session['username'] }}!</h2>
+    {% else %}
+        <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
+    {% endif %}
     
     <p class="lead small">It is currently {{ time }}.</p>
 
@@ -34,5 +41,7 @@
     <div>
       <a href="{{ url_for('classify') }}"> <input type="button" class="btn btn-success btn-block bigger" value="I'm ready to start classifying!"> </a>
     </div>
-
+    {% for message in get_flashed_messages() %}
+          {{message}}
+    {% endfor %}
 {% endblock %}
