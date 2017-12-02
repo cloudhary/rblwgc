@@ -21,9 +21,43 @@
     </head>
 
     <body>
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+                    <a class="navbar-brand" href="#">Raffles Banded Langur App</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+              
+                    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                      <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        {% if session['logged_in'] == True %}
+                        <li class="nav-item">
+                                <a class="nav-link" href="/training">Training</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="/classify">Live Classification</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('logout') }}"> <input type="button" class="btn btn-warning" value="Logout"> </a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                                <a href="/signup"> <input type="button" class="btn btn-success" value="Sign up!"> </a>
+                        </li>
+                        {% endif %}
+                    </div>
+                  </nav>
+        <br/>
         <main role="main" class="container">
             
                   <div class="starter-template">
+                    {% if session['logged_in'] == True %}
+                        <h2 class="cover-heading">Hello {{ session['username'] }}!</h2>
+                    {% else %}
+                        <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
+                    {% endif %}
                     {% block content %}
                     {% endblock %}
                   </div>

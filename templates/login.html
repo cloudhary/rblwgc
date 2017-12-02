@@ -1,14 +1,5 @@
 <!--{% extends "layout.html" %}-->
 {% block content %}
-    {% if session['logged_in'] == True %}
-        <div id = "logout">
-          <a href="{{ url_for('logout') }}" style="float :right"> <input type="button" class="btn btn-light" value="Logout"> </a>
-        </div>
-
-        <h2 class="cover-heading">Hello {{ session['username'] }}!</h2>
-    {% else %}
-        <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
-    {% endif %}
 
         {% if session['logged_in'] != True %}
         <div class="container">
