@@ -3,6 +3,7 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_session import Session
 
 
 app = Flask(__name__)
@@ -17,6 +18,13 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
 
 db = SQLAlchemy(app)
+
+# Setup Sessions
+SESSION_TYPE = 'sqlalchemy'
+app.config['SESSION_SQLALCHEMY_TABLE'] = 'sessions'
+app.config['SESSION_SQLALCHEMY'] = db
+db.create_all()
+Session(app)
 
 """@app.route('/flush')
 def flushing():
@@ -62,7 +70,6 @@ class User(db.Model):
 
 @app.route('/')
 def homepage():
-    db.create_all()
     if session.get('logged_in') == True:
         return redirect((url_for('training')))
     else:
