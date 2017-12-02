@@ -2,15 +2,20 @@ import random, os
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.secret_key = 'my precious'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 url = os.environ.get('DATABASE_URL', None)
-if url: app.config['SQLALCHEMY_DATABASE_URI'] = url
+if url: 
+    app.config['SQLALCHEMY_DATABASE_URI'] = url
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
+
 db = SQLAlchemy(app)
 
 class Match(db.Model):
@@ -98,8 +103,10 @@ def training():
     image_ids=['a1', 'a2', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 's1', 's2']
     image_1 = random.choice(image_ids)
     image_2 = random.choice([x for x in image_ids if x != image_1])
+    user = User.query.filter_by(name=session['username']).first()
+    total_count = Match.query.filter_by(user_id=user.id).count()
     return render_template('training.html', time=the_time,
-        image_1=image_1, image_2=image_2,
+        image_1=image_1, image_2=image_2, total_count=total_count,
         options=["Not at all!", "Not too sure..", "Definitely!"])
 
 @app.route('/classify', methods=['GET', 'POST'])
@@ -109,9 +116,12 @@ def classify():
     image_ids=['a1', 'a2', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 's1', 's2']
     image_1 = random.choice(image_ids)
     image_2 = random.choice([x for x in image_ids if x != image_1])
+    user = User.query.filter_by(name=session['username']).first()
+    total_count = Match.query.filter_by(user_id=user.id).count()
     return render_template('classify.html',
-        image_1=image_1, image_2=image_2,
+        image_1=image_1, image_2=image_2, total_count=total_count,
         options=["Not at all!", "Not too sure..", "Definitely!"])
+
 
 @app.route('/submit', methods=['POST'])
 def submit():

@@ -56,7 +56,7 @@
             
                   <div class="starter-template">
                     {% if session['logged_in'] == True %}
-                        <h3 class="cover-heading">Hello {{ session['username'] }}!</h3>
+                        <h3 class="cover-heading">Hello {{ session['username'] }}! <span class="badge badge-primary"> {{total_count}} Classifications Done</span></h3>
                     {% else %}
                         <h3 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h3>
                     {% endif %}
