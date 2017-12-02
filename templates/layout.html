@@ -56,9 +56,9 @@
             
                   <div class="starter-template">
                     {% if session['logged_in'] == True %}
-                        <h2 class="cover-heading">Hello {{ session['username'] }}!</h2>
+                        <h3 class="cover-heading">Hello {{ session['username'] }}!</h3>
                     {% else %}
-                        <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
+                        <h3 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h3>
                     {% endif %}
                     {% block content %}
                     {% endblock %}

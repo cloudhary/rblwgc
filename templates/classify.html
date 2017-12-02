@@ -1,27 +1,32 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <h2 class="cover-heading">Seems like you're ready! Let's do live classification then</h2>
-
     <img src="{{ url_for('static', filename=image_1 + '.jpg') }}" height="300" width="300" class=""/>
     <img src="{{ url_for('static', filename=image_2 + '.jpg') }}" form="dawg" height="300" width="300" class=""/>
 
     <br/>
     <br/>
 
-    <p class="lead">Are these two photos of the same langur? </p>
-
-    <form action="{{ url_for('submit') }}" method="post" class="form-check-inline">
-
-      {% for opt in options %}
-      <div class="form-check">
-      <label class="form-check-label">
-        <input type="radio" class="form-check-input" name="classification" value='{{opt}}'> {{opt}}
-      </label>
+    <div class="card text-center">
+        <div class="card-header" style="color:black">
+          <b style="color:maroon">Live Classification</b>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title" style="color:black">Are these two photos of the same langur?</h4>
+          <form action="{{ url_for('submit') }}" method="post" class="form-check-inline">
+    
+              {% for opt in options %}
+              <div class="form-check">
+              <label class="form-check-label" style="color:black">
+                <input type="radio" class="form-check-input" name="classification" value='{{opt}}'> {{opt}}
+              </label>
+              </div>
+              {% endfor %}
+              <input type="hidden" name="image_1" value="{{image_1}}" />
+              <input type="hidden" name="image_2" value="{{image_2}}" /> <br/>
+              <input type="submit" class="btn btn-success btn-block bigger">
+            </form>
+        </div>
       </div>
-      {% endfor %}
-      <input type="hidden" name="image_1" value="{{image_1}}" />
-      <input type="hidden" name="image_2" value="{{image_2}}" /> <br/><br/>
-      <input type="submit" class="btn btn-success btn-block bigger">
-    </form>
+
 {% endblock %}
