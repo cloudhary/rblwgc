@@ -18,14 +18,16 @@ class Match(db.Model):
     image_1 = db.Column(db.String(80))
     image_2 = db.Column(db.String(80))
     classification = db.Column(db.String(80))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    def __init__(self, image_1, image_2, classification):
+    def __init__(self, image_1, image_2, classification, user_id):
         self.image_1 = image_1
         self.image_2 = image_2
         self.classification = classification
+        self.user_id = user_id
 
     def __repr__(self):
-        return '<Image %r and %r have been classified as %r>' % (self.image_1, self.image_2, self.classification)
+        return '<Image %r and %r have been classified as %r by %r>' % (self.image_1, self.image_2, self.classification, self.id)
 
 class User(db.Model):
 
@@ -35,6 +37,7 @@ class User(db.Model):
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String)
+    classifications = db.relationship('Match', backref='users', lazy=True)
 
     def __init__(self, name, email, password):
         self.name = name
@@ -115,9 +118,10 @@ def submit():
     classification = request.form['classification']
     image_1 = request.form['image_1']
     image_2 = request.form['image_2']
+    user = User.query.filter_by(name=session['username']).first()
 
     if (db):
-        db.session.add(Match(image_1, image_2, classification))
+        db.session.add(Match(image_1, image_2, classification, user.id))
         db.session.commit()
         print Match.query.all()
     return redirect(url_for('classify'))
