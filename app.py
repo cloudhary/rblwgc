@@ -18,6 +18,14 @@ else:
 
 db = SQLAlchemy(app)
 
+@app.route('/flush')
+def flushing():
+    db.reflect()
+    db.drop_all()
+    db.create_all()
+
+    return "OMG db has been flushed!"
+
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     image_1 = db.Column(db.String(80))
