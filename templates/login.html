@@ -4,33 +4,48 @@
         <div id = "logout">
           <a href="{{ url_for('logout') }}" style="float :right"> <input type="button" class="btn btn-light" value="Logout"> </a>
         </div>
+
         <h2 class="cover-heading">Hello {{ session['username'] }}!</h2>
     {% else %}
         <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
     {% endif %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
-    <div class="container">
         {% if session['logged_in'] != True %}
-              <p class="lead small">Sign in to continue</p>
+        <div class="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col">
+              <p class="lead small">Please Sign in to Continue</p>
               <form action="" method="post">
-                <input type="text" placeholder="Username" name="username" value="{{
-                  request.form.username }}">
-                 <input type="password" placeholder="Password" name="password" value="{{
-                  request.form.password }}">
-                <input class="btn btn-light" type="submit" value="Login" >
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input class="form-control" type="text" placeholder="Username" name="username" value="{{
+                    request.form.username }}">
+                  <label for="password">Password</label>
+                  <input class="form-control" type="password" placeholder="Password" name="password" value="{{
+                    request.form.password }}">
+                  <br/>
+                  <input class="btn btn-primary btn-block big" class="btn btn-light" type="submit" value="Login" >
+                </div>
               </form>
-            <p> Not a member? <a href={{url_for('signup')}}>Sign Up</a> </p>
+            <br/>
 
-        {% endif %}
-        {% if error %}
-            <p class="error"><strong>Error:</strong> {{ error }}
-        {% endif %}
-        {% for message in get_flashed_messages() %}
-          {{message}}
-        {% endfor %}
-    </div>
+            <div class="alert alert-primary" role="alert">
+                Not a member? <a href={{url_for('signup')}}>Sign Up</a>
+            </div>
+
+            {% endif %}
+            {% if error %}
+            <div class="alert alert-danger" role="alert"></div>
+                <strong>Error:</strong> {{ error }}
+            </div>
+            {% endif %}
+            {% for message in get_flashed_messages() %}
+              {{message}}
+            {% endfor %}
+          </div>
+          <div class="col"></div>
+          </div>
+        </div>
+
 {% endblock %}

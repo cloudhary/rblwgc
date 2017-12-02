@@ -1,3 +1,10 @@
+# Dont want to confuse Heroku
+Pipfile
+Pipfile.lock
+
+# Dont want to put my settings here lol
+.vscode
+
 # All hail the mac
 .DS_Store
 

@@ -9,28 +9,37 @@
         <h2 class="cover-heading">Hello passionate Raffles Banded Langur volunteer!</h2>
     {% endif %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
-  </head>
-  <body>
     <div class="container">
+        <div class="row">
+                <div class="col"></div>
+                <div class="col">
         {% if session['logged_in'] != True %}
-              <p class="lead small">Enter your details</p>
+              <p class="lead small">Please enter your details below</p>
               <form action="" method="post">
-                  <label><span> Username: </span><input type="text" placeholder="Username" name="username" value="{{
+                <div class="form-group">
+                <label for="username">Username</label>
+                  <input class="form-control" type="text" placeholder="Username" name="username" value="{{
                   request.form.username }}"> <br/>
-                  <label><span> Email: </span><input type="text" placeholder="email" name="email" value="{{
+                  <label for="email">Email</label>
+                <input class="form-control" type="text" placeholder="email" name="email" value="{{
                   request.form.username }}"> <br/>
-                 <label><span>Password:  </span><input type="password" placeholder="Password" name="password" value="{{
+                  <label for="password">Password</label>
+                 <input class="form-control" type="password" placeholder="Password" name="password" value="{{
                   request.form.password }}"> <br />
-                 <input class="btn btn-light" type="submit" value="Sign Up">
+                 <input class="btn btn-primary btn-block big" type="submit" value="Sign Up">
+                 </div>
               </form>
         {% endif %}
+
         {% if error %}
-            <p class="error"><strong>Error:</strong> {{ error }}
+            <strong>Error:</strong> {{ error }}
         {% endif %}
+
         {% for message in get_flashed_messages() %}
           {{message}}
         {% endfor %}
+        
+        </div>
+        <div class="col"></div>
     </div>
 {% endblock %}
