@@ -3,7 +3,7 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-
+from sqlalchemy import exc
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -45,8 +45,8 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    id = db.Column(db.Integer, autoincrement=True)
+    name = db.Column(db.String, primary_key=True, nullable=False)
     email = db.Column(db.String, nullable=False)
     password = db.Column(db.String)
     classifications = db.relationship('Match', backref='users', lazy=True)
@@ -93,11 +93,16 @@ def logout():
 def signup():
     error = None
     if request.method == 'POST':
-        db.session.add(User(request.form['username'],request.form['email'], request.form['password']))
-        db.session.commit()
-        session['logged_in'] = True
-        session['username'] = request.form['username']
-        return redirect(url_for('training'))
+        try:
+            new_user = User(request.form['username'],request.form['email'], request.form['password'])
+            db.session.add(new_user)
+            db.session.commit()
+            session['logged_in'] = True
+            session['username'] = request.form['username']
+            return redirect(url_for('training'))
+        except exc.IntegrityError as e:
+            db.session.rollback()
+            flash('Oops! Username ' + request.form['username'] + ' already exists!', 'error')
     else:
         error = 'Invalid Credentials. Please try again.'
     return render_template('signup.html')
