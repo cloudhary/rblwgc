@@ -1,4 +1,6 @@
 import random, os
+import json
+import requests
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -115,7 +117,16 @@ def training():
     image_ids=['a1', 'a2', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 's1', 's2']
     image_1 = random.choice(image_ids)
     image_2 = random.choice([x for x in image_ids if x != image_1])
-    user = User.query.filter_by(name=session['username']).first()
+    
+    # Deal with Invalid Sessions
+    try:
+        user = User.query.filter_by(name=session['username']).first()
+    except:
+        return redirect(url_for('logout'))
+
+    if user is None:
+        return redirect(url_for('logout'))
+
     total_count = Match.query.filter_by(user_id=user.id).count()
     return render_template('training.html', time=the_time,
         image_1=image_1, image_2=image_2, total_count=total_count,
@@ -125,9 +136,16 @@ def training():
 def classify():
     if session.get('logged_in') != True:
         return redirect(url_for('login'))
-    image_ids=['a1', 'a2', 'b1', 'b2', 'c1', 'c2', 'd1', 'd2', 's1', 's2']
+
+    # Gather Image Limits
+    limit = requests.get("https://s3-ap-southeast-1.amazonaws.com/rblwg/images/meta.json")
+    limit  = json.loads(limit.text)['image_count']
+    image_ids = list(range(1, int(limit)))
     image_1 = random.choice(image_ids)
     image_2 = random.choice([x for x in image_ids if x != image_1])
+    image_1 = "https://s3-ap-southeast-1.amazonaws.com/rblwg/images/image" + '{:05d}'.format(image_1) + ".jpg"
+    image_2 = "https://s3-ap-southeast-1.amazonaws.com/rblwg/images/image" + '{:05d}'.format(image_2) + ".jpg"
+
     user = User.query.filter_by(name=session['username']).first()
     total_count = Match.query.filter_by(user_id=user.id).count()
     return render_template('classify.html',
