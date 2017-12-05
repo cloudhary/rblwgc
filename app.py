@@ -119,15 +119,13 @@ def signup():
 def leaderboard():
     if session.get('logged_in') != True:
         return redirect(url_for('login'))
-    try:
-        board = Match.query.join(User, User.id==Match.user_id).group_by(Match.user_id).add_column(func.count(Match.id)).add_column(Match.user_id).add_column(User.name).order_by(func.count(Match.id).desc()).limit(50)
-        user = User.query.filter_by(name=session['username']).first()
-        total_count = Match.query.filter_by(user_id=user.id).count()
-    except Exception, err:
-        return traceback.print_exc()
 
-    return render_template('leaderboard.html',
-        board=board, total_count=total_count)
+    board = Match.query.join(User, User.id==Match.user_id).group_by(Match.user_id).add_column(func.count(Match.id)).add_column(Match.user_id).add_column(User.name).order_by(func.count(Match.id).desc()).limit(50)
+    user = User.query.filter_by(name=session['username']).first()
+    total_count = Match.query.filter_by(user_id=user.id).count()
+
+    return render_template('leaderboard.html', board=board,
+                           total_count=total_count)
 
 @app.route('/training')
 def training():
@@ -184,6 +182,15 @@ def submit():
         db.session.add(Match(image_1, image_2, classification, user.id))
         db.session.commit()
     return redirect(url_for('classify'))
+
+@app.errorhandler(500)
+def internal_error(exception):
+    """Show traceback in the browser when running a flask app on a production server.
+    By default, flask does not show any useful information when running on a production server.
+    By adding this view, we output the Python traceback to the error 500 page.
+    """
+    trace = traceback.format_exc()
+    return("<pre>" + trace + "</pre>"), 500
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
