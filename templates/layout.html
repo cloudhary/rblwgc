@@ -41,6 +41,9 @@
                         <li class="nav-item {% if request.path == '/classify' %}active{% endif %}">
                                 <a class="nav-link" href="/classify">Live Classification</a>
                         </li>
+                        <li class="nav-item {% if request.path == '/leaderboard' %}active{% endif %}">
+                            <a class="nav-link" href="/leaderboard">Leaderboard</a>
+                        </li>
                         <li class="nav-item {% if request.path == '/logout' %}active{% endif %}">
                             <a href="{{ url_for('logout') }}"> <input type="button" class="btn btn-warning btn-sm" value="Logout"> </a>
                         </li>

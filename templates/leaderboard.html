@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block content %}
+<br/>
+<br/>
+<h3>Top 50 Classifications Leaderboard</h3>
+<br/>
+
+<table class="table table-responsive-md">
+    <thead class="thead-dark">
+        <tr>
+        <th scope="col">Rank</th>
+        <th scope="col">Username</th>
+        <th scope="col">Classifications</th>
+        </tr>
+    </thead>
+    <tbody>
+
+{% for result_leaderboard in board %}
+    <tr>
+        <th scope="row">{{ loop.index }}</th>
+        <td>{{result_leaderboard[3]}}</td>
+        <td>{{result_leaderboard[2]}}</td>
+    </tr>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+{% endblock %}

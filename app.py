@@ -5,7 +5,7 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from sqlalchemy import exc
+from sqlalchemy import exc, func
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -16,9 +16,10 @@ url = os.environ.get('DATABASE_URL', None)
 if url: 
     app.config['SQLALCHEMY_DATABASE_URI'] = url
 else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///:memory:"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///test.db"
 
 db = SQLAlchemy(app)
+db.create_all()
 
 """@app.route('/flush')
 def flushing():
@@ -47,10 +48,10 @@ class User(db.Model):
 
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, autoincrement=True)
-    name = db.Column(db.String, primary_key=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False)
-    password = db.Column(db.String)
+    password = db.Column(db.String, nullable=False)
     classifications = db.relationship('Match', backref='users', lazy=True)
 
     def __init__(self, name, email, password):
@@ -95,19 +96,33 @@ def logout():
 def signup():
     error = None
     if request.method == 'POST':
-        try:
+        
+        if User.query.filter_by(email=request.form['email']).first() is None and \
+            User.query.filter_by(name=request.form['username']).first() is None:
+
             new_user = User(request.form['username'],request.form['email'], request.form['password'])
             db.session.add(new_user)
             db.session.commit()
             session['logged_in'] = True
             session['username'] = request.form['username']
             return redirect(url_for('training'))
-        except exc.IntegrityError as e:
+        else:
             db.session.rollback()
-            flash('Oops! Username ' + request.form['username'] + ' already exists!', 'error')
+            flash('Oops! Username ' + request.form['username'] + ' or Email ' + request.form['username'] \
+             + ' already exists!', 'error')
     else:
         error = 'Invalid Credentials. Please try again.'
     return render_template('signup.html')
+
+@app.route("/leaderboard")
+def leaderboard():
+    if session.get('logged_in') != True:
+        return redirect(url_for('login'))
+    board = Match.query.join(User, User.id==Match.user_id).group_by(Match.user_id).add_column(func.count(Match.id)).add_column(Match.user_id).add_column(User.name).order_by(func.count(Match.id).desc()).limit(50)
+    user = User.query.filter_by(name=session['username']).first()
+    total_count = Match.query.filter_by(user_id=user.id).count()
+    return render_template('leaderboard.html',
+        board=board, total_count=total_count)
 
 @app.route('/training')
 def training():
@@ -163,7 +178,6 @@ def submit():
     if (db):
         db.session.add(Match(image_1, image_2, classification, user.id))
         db.session.commit()
-        print Match.query.all()
     return redirect(url_for('classify'))
 
 if __name__ == '__main__':
