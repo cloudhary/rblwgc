@@ -21,12 +21,12 @@ else:
 db = SQLAlchemy(app)
 db.create_all()
 
-"""@app.route('/flush')
+@app.route('/flush')
 def flushing():
     db.reflect()
     db.drop_all()
     db.create_all()
-    return "OMG db has been flushed!"""
+    return 'OMG db has been flushed!'
 
 class Match(db.Model):
     id = db.Column(db.Integer, primary_key=True)
