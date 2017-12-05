@@ -12,7 +12,7 @@
     <p class="lead">Are these two photos of the same langur? </p>
 
     {% for opt in options %}
-      <input type="button" class="btn btn-light" value="{{opt}}" onclick="document.getElementById('answer').innerHTML = '{{image_1|safe}}'[0]=='{{image_2|safe}}'[0] ? 'The same!' : 'Different langurs';">
+      <input type="button" class="btn btn-light" value="{{opt}}" onclick="document.getElementById('answer').innerHTML = '{{image_1|safe}}'[0]=='{{image_2|safe}}'[0] ? 'They are same Languar!' : 'They are Different Langurs';">
     {% endfor %}
 
     <br/>
