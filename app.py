@@ -177,6 +177,10 @@ def classify():
     image_2 = random.choice([x for x in image_ids if x != image_1])
     image_1 = "https://s3-ap-southeast-1.amazonaws.com/rblwg/images/image" + '{:05d}'.format(image_1) + ".jpg"
     image_2 = "https://s3-ap-southeast-1.amazonaws.com/rblwg/images/image" + '{:05d}'.format(image_2) + ".jpg"
+    image_1 = "http://edge.zimage.io/?url=" + image_1 + "&w=600"
+    image_2 = "http://edge.zimage.io/?url=" + image_2 + "&w=600"
+    #image_1 = "http://s3-ap-southeast-1.amazonaws.com.rsz.io/rblwg/images/image" + '{:05d}'.format(image_1) + ".jpg?width=600"
+    #image_2 = "http://s3-ap-southeast-1.amazonaws.com.rsz.io/rblwg/images/image" + '{:05d}'.format(image_2) + ".jpg?width=600"
 
     user = User.query.filter_by(name=session['username']).first()
     total_count = Match.query.filter_by(user_id=user.id).count()
