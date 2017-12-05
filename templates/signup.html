@@ -27,9 +27,13 @@
             <strong>Error:</strong> {{ error }}
         {% endif %}
 
+        {% if get_flashed_messages() %}
+        <div class="alert alert-danger" role="alert">
         {% for message in get_flashed_messages() %}
           {{message}}
         {% endfor %}
+        </div>
+        {% endif %}
         
         </div>
         <div class="col-2"></div>
