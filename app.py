@@ -134,7 +134,12 @@ def leaderboard():
 
 @app.route("/credits")
 def credits():
-    return render_template('credits.html')
+    if session.get('logged_in') == True:
+        user = User.query.filter_by(name=session['username']).first()
+        total_count = Match.query.filter_by(user_id=user.id).count()
+    else:
+        total_count = ''
+    return render_template('credits.html', total_count=total_count)
 
 @app.route('/training')
 def training():
