@@ -194,6 +194,10 @@ def submit():
     classification = request.form['classification']
     image_1 = request.form['image_1']
     image_2 = request.form['image_2']
+
+    # Clean URLs
+    image_1 = image_1.split("/")[-1].split("&")[0]
+    image_2 = image_2.split("/")[-1].split("&")[0]
     user = User.query.filter_by(name=session['username']).first()
 
     if (db):
