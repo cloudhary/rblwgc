@@ -127,12 +127,14 @@ def leaderboard():
     ORDER BY count(match.id) DESC
     LIMIT 50
     ''')
-    #board = Match.query.join(User, User.id==Match.user_id).group_by(Match.user_id).add_column(func.count(Match.id)).add_column(User.name).order_by(func.count(Match.id).desc()).limit(50)
     user = User.query.filter_by(name=session['username']).first()
     total_count = Match.query.filter_by(user_id=user.id).count()
-    print(board)
     return render_template('leaderboard.html', board=board,
                            total_count=total_count)
+
+@app.route("/credits")
+def credits():
+    return render_template('credits.html')
 
 @app.route('/training')
 def training():
